@@ -2,6 +2,7 @@ package premierleague.web.scraper.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,16 +34,22 @@ public class ClubService {
     }
 
     public List<ClubDto> getAllClubs() throws DocumentParseException {
-        List<ClubDto> clubs;
+        List<ClubDto> clubsDto;
         try {
-            List<Club> names = new ArrayList<>();
-            Elements elements = Jsoup.connect(premierLeagueUrl + "/clubs?se=489").get().getElementsByClass("clubName");
-            elements.forEach(element -> names.add(new Club(element.text())));
-            clubRepository.saveAll(names);
-            clubs = clubToDtoConverter.convert(names);
+            Document document = Jsoup.connect(premierLeagueUrl + "/clubs?se=489").get();
+            List<Club> clubs = parseClub(document);
+            clubRepository.saveAll(clubs);
+            clubsDto = clubToDtoConverter.convert(clubs);
         } catch (IOException e) {
             throw new DocumentParseException("Can't parse HTML document!", e.getMessage());
         }
+        return clubsDto;
+    }
+
+    public List<Club> parseClub(Document document) {
+        List<Club> clubs = new ArrayList<>();
+        Elements items = document.getElementsByClass("indexItem");
+        items.forEach(item -> clubs.add(new Club(item.select("h4").text(), item.getElementsByClass("stadiumName").text(), item.select("a").attr("href"))));
         return clubs;
     }
 
@@ -53,4 +60,5 @@ public class ClubService {
         }
         return clubToDtoConverter.convertToDto(club.get());
     }
+
 }

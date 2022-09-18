@@ -19,8 +19,16 @@ public class Club {
     @Column(name = "name")
     private String name;
 
-    public Club(String name) {
+    @Column(name = "stadium")
+    private String stadium;
+
+    @Column(name = "overview")
+    private String overview;
+
+    public Club(String name, String stadium, String overview) {
         this.name = name;
+        this.stadium = stadium;
+        this.overview = overview;
     }
 
 }
