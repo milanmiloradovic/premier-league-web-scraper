@@ -13,5 +13,6 @@ public class ClubDto {
     @JsonProperty("clubId")
     private Long id;
     private String name;
+    private String stadium;
 
 }
