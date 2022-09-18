@@ -34,12 +34,12 @@ public class ClubService {
     }
 
     public List<ClubDto> getAllClubs() throws DocumentParseException {
-        List<ClubDto> clubsDto = new ArrayList<>();
+        List<ClubDto> clubsDto;
         try {
             Document document = Jsoup.connect(premierLeagueUrl + "/clubs?se=489").get();
             List<Club> clubs = parseClub(document);
-//            clubRepository.saveAll(clubs);
-//            clubsDto = clubToDtoConverter.convert(clubs);
+            clubRepository.saveAll(clubs);
+            clubsDto = clubToDtoConverter.convert(clubs);
         } catch (IOException e) {
             throw new DocumentParseException("Can't parse HTML document!", e.getMessage());
         }
@@ -48,15 +48,8 @@ public class ClubService {
 
     public List<Club> parseClub(Document document) {
         List<Club> clubs = new ArrayList<>();
-        Elements names = document.getElementsByClass("clubName");
-        Elements stadiums = document.getElementsByClass("stadiumName");
-        Elements overviews = document.getElementsByClass("indexItem");
-
-        names.forEach(name -> clubs.add(new Club()));
-        stadiums.forEach(stadium -> log.info(stadium.text()));
-        overviews.forEach(overview -> log.info(overview.select("a").attr("href")));
-
-//        elements.forEach(element -> clubs.add(new Club(element.text())));
+        Elements items = document.getElementsByClass("indexItem");
+        items.forEach(item -> clubs.add(new Club(item.select("h4").text(), item.getElementsByClass("stadiumName").text(), item.select("a").attr("href"))));
         return clubs;
     }
 
@@ -67,4 +60,5 @@ public class ClubService {
         }
         return clubToDtoConverter.convertToDto(club.get());
     }
+
 }

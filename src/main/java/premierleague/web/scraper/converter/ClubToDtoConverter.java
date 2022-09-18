@@ -12,13 +12,12 @@ public class ClubToDtoConverter {
 
     public List<ClubDto> convert(List<Club> clubs) {
         List<ClubDto> result = new ArrayList<>();
-//        clubs.forEach(club -> result.add((new ClubDto(club.getId(), club.getName()))));
+        clubs.forEach(club -> result.add((new ClubDto(club.getId(), club.getName(), club.getStadium()))));
         return result;
     }
 
     public ClubDto convertToDto(Club club) {
-//        return new ClubDto(club.getId(), club.getName());
-        return null;
+        return new ClubDto(club.getId(), club.getName(), club.getStadium());
     }
 
 }
