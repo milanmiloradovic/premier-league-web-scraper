@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class ClubService {
 
-    @Value("${PREMIER_LEAGUE_URL:https://www.premierleague.com/}")
+    @Value("${premier.league.url}")
     private String premierLeagueUrl;
 
     private final ClubToDtoConverter clubToDtoConverter;
@@ -36,7 +36,7 @@ public class ClubService {
         List<ClubDto> clubs;
         try {
             List<Club> names = new ArrayList<>();
-            Elements elements = Jsoup.connect(premierLeagueUrl + "/clubs").get().getElementsByClass("clubName");
+            Elements elements = Jsoup.connect(premierLeagueUrl + "/clubs?se=489").get().getElementsByClass("clubName");
             elements.forEach(element -> names.add(new Club(element.text())));
             clubRepository.saveAll(names);
             clubs = clubToDtoConverter.convert(names);
