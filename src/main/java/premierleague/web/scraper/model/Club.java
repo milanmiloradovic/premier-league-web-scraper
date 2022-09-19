@@ -34,6 +34,10 @@ public class Club implements Serializable {
     @ToString.Exclude
     private List<Player> players;
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "club")
+    private Stat stat;
+
     public Club(String name, String stadium, String overview) {
         this.name = name;
         this.stadium = stadium;

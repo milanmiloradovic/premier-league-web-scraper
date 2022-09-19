@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import premierleague.web.scraper.dto.ClubDto;
 import premierleague.web.scraper.dto.ErrorMessageDto;
+import premierleague.web.scraper.dto.PlayerDto;
+import premierleague.web.scraper.dto.StatDto;
 import premierleague.web.scraper.exception.ClubNotFoundException;
-import premierleague.web.scraper.exception.DocumentParseException;
 import premierleague.web.scraper.service.ClubService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/data/clubs")
@@ -24,11 +27,7 @@ public class ClubController {
 
     @GetMapping("")
     public ResponseEntity<Object> getClubsData() {
-        try {
-            return new ResponseEntity<>(clubService.getAllClubs(), HttpStatus.OK);
-        } catch (DocumentParseException e) {
-            return new ResponseEntity<>(new ErrorMessageDto(e.getTitle()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(clubService.getAllClubs(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -40,5 +39,26 @@ public class ClubController {
             return new ResponseEntity<>(new ErrorMessageDto(e.getTitle()), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/{id}/players")
+    public ResponseEntity<Object> getClubPlayersData(@PathVariable Long id) {
+        try {
+            List<PlayerDto> playerDtos = clubService.getPlayersByClub(id);
+            return new ResponseEntity<>(playerDtos, HttpStatus.OK);
+        } catch (ClubNotFoundException e) {
+            return new ResponseEntity<>(new ErrorMessageDto(e.getTitle()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<Object> getClubStatData(@PathVariable Long id) {
+        try {
+            StatDto statDtos = clubService.getStatsByClub(id);
+            return new ResponseEntity<>(statDtos, HttpStatus.OK);
+        } catch (ClubNotFoundException e) {
+            return new ResponseEntity<>(new ErrorMessageDto(e.getTitle()), HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }
