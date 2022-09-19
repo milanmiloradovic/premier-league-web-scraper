@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatsDto {
+public class StatDto {
 
     private int matchesPlayed;
     private int wins;
@@ -15,5 +15,6 @@ public class StatsDto {
     private int goals;
     private int goalsConceded;
     private int cleanSheets;
+    private ClubDto club;
 
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import premierleague.web.scraper.dto.ErrorMessageDto;
 import premierleague.web.scraper.dto.PlayerDto;
-import premierleague.web.scraper.exception.DocumentParseException;
 import premierleague.web.scraper.exception.PlayerNotFoundException;
 import premierleague.web.scraper.service.PlayerService;
 
@@ -24,11 +23,7 @@ public class PlayerController {
 
     @GetMapping("")
     public ResponseEntity<Object> getPlayersData() {
-        try {
-            return new ResponseEntity<>(playerService.getAllPlayers(), HttpStatus.OK);
-        } catch (DocumentParseException e) {
-            return new ResponseEntity<>(new ErrorMessageDto(e.getTitle()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(playerService.getAllPlayers(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

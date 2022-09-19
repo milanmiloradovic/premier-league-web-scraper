@@ -1,6 +1,5 @@
 package premierleague.web.scraper.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import premierleague.web.scraper.converter.PlayerToDtoConverter;
 import premierleague.web.scraper.dto.PlayerDto;
@@ -12,7 +11,6 @@ import premierleague.web.scraper.repository.PlayerRepository;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class PlayerService {
 
@@ -24,7 +22,7 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public List<PlayerDto> getAllPlayers() throws DocumentParseException {
+    public List<PlayerDto> getAllPlayers() {
         List<Player> players = (List<Player>) playerRepository.findAll();
         return playerToDtoConverter.convert(players);
     }
