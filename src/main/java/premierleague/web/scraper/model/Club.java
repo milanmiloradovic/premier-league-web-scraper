@@ -30,7 +30,7 @@ public class Club implements Serializable {
     private String overview;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "club")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "club")
     @ToString.Exclude
     private List<Player> players;
 

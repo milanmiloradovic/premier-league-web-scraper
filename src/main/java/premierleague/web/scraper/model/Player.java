@@ -32,7 +32,6 @@ public class Player implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
-    @JoinColumn(name = "club_id", insertable = false, updatable = false)
     private Club club;
 
     public Player(String name, String position, int number, String nationality, Club club) {
