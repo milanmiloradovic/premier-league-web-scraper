@@ -3,7 +3,9 @@ package premierleague.web.scraper.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import premierleague.web.scraper.converter.ClubToDtoConverter;
+import premierleague.web.scraper.converter.PlayerToDtoConverter;
 import premierleague.web.scraper.dto.ClubDto;
+import premierleague.web.scraper.dto.PlayerDto;
 import premierleague.web.scraper.exception.ClubNotFoundException;
 import premierleague.web.scraper.exception.DocumentParseException;
 import premierleague.web.scraper.model.Club;
@@ -17,10 +19,12 @@ import java.util.Optional;
 public class ClubService {
 
     private final ClubToDtoConverter clubToDtoConverter;
+    private final PlayerToDtoConverter playerToDtoConverter;
     private final ClubRepository clubRepository;
 
-    public ClubService(ClubToDtoConverter clubToDtoConverter, ClubRepository clubRepository) {
+    public ClubService(ClubToDtoConverter clubToDtoConverter, PlayerToDtoConverter playerToDtoConverter, ClubRepository clubRepository) {
         this.clubToDtoConverter = clubToDtoConverter;
+        this.playerToDtoConverter = playerToDtoConverter;
         this.clubRepository = clubRepository;
     }
 
@@ -37,4 +41,11 @@ public class ClubService {
         return clubToDtoConverter.convertToDto(club.get());
     }
 
+    public List<PlayerDto> getPlayersByClub(Long id) {
+        Optional<Club> club = clubRepository.findById(id);
+        if (club.isEmpty()) {
+            throw new ClubNotFoundException("Club with id " + id + " doesn't exist!");
+        }
+        return playerToDtoConverter.convert(club.get().getPlayers());
+    }
 }

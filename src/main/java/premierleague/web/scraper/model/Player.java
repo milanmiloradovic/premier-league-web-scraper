@@ -31,6 +31,7 @@ public class Player implements Serializable {
     private String nationality;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "club_id")
     @ToString.Exclude
     private Club club;
 
