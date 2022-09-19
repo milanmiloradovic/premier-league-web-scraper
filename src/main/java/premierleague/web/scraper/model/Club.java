@@ -1,10 +1,13 @@
 package premierleague.web.scraper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +16,7 @@ import java.io.Serializable;
 public class Club implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_id")
     private Long id;
 
@@ -25,6 +28,11 @@ public class Club implements Serializable {
 
     @Column(name = "overview")
     private String overview;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "club")
+    @ToString.Exclude
+    private List<Player> players;
 
     public Club(String name, String stadium, String overview) {
         this.name = name;

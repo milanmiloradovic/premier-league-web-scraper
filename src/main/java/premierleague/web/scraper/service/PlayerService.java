@@ -38,7 +38,6 @@ public class PlayerService {
     }
 
     public List<PlayerDto> getAllPlayers() throws DocumentParseException {
-        List<PlayerDto> playersDto = new ArrayList<>();
         List<Club> clubs = (List<Club>) clubRepository.findAll();
         for (Club club : clubs) {
             try {
@@ -46,12 +45,11 @@ public class PlayerService {
                 Document document = Jsoup.connect(premierLeagueUrl + sufix).get();
                 List<Player> players = parsePlayer(document, club);
                 playerRepository.saveAll(players);
-                playersDto = playerToDtoConverter.convert(players);
             } catch (IOException e) {
                 throw new DocumentParseException("Can't parse HTML document!", e.getMessage());
             }
         }
-        return playersDto;
+        return playerToDtoConverter.convert();
     }
 
     public List<Player> parsePlayer(Document document, Club club) {

@@ -2,6 +2,7 @@ package premierleague.web.scraper.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 public class Player implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "player_id")
     private Long id;
 
@@ -29,8 +30,9 @@ public class Player implements Serializable {
     @Column(name = "nationality")
     private String nationality;
 
-    @OneToOne()
-    @JoinColumn(name = "club", referencedColumnName = "club_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JoinColumn(name = "club_id", insertable = false, updatable = false)
     private Club club;
 
     public Player(String name, String position, int number, String nationality, Club club) {
