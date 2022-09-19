@@ -33,6 +33,10 @@ dependencies {
 	testImplementation "com.h2database:h2"
 }
 
-tasks.named('test') {
+jar {
+	enabled = false //don't generate plain.jar file
+}
+
+test {
 	useJUnitPlatform()
 }
